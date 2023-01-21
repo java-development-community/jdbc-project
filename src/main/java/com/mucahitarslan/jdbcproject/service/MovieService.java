@@ -5,9 +5,7 @@ import com.mucahitarslan.jdbcproject.dto.request.MovieRequest;
 import com.mucahitarslan.jdbcproject.dto.response.MovieResponse;
 import com.mucahitarslan.jdbcproject.model.Movie;
 import com.mucahitarslan.jdbcproject.repository.MovieRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,10 +40,13 @@ public class MovieService {
                 .collect(Collectors.toList());
     }
 
-    public Page<Movie> getPageableMovies(){
-        PageRequest pageRequest = PageRequest.of(1,1);
-        Page<Movie> pagedMovies = movieRepository.findAll(pageRequest);
+    public Page<MovieResponse> getPageableMovies(int page, int size){
+        PageRequest pageRequest = PageRequest.of( page, size);
+        var pagedMovies = movieRepository.findAll(pageRequest).stream()
+                .map(movieConverter::toMovieResponse)
+                .collect(Collectors.toList());
 
-        return pagedMovies;
+        return new PageImpl<>(pagedMovies);
+
     }
 }

@@ -28,8 +28,8 @@ public class MovieController {
         return movieService.findAllSorting();
     }
     @GetMapping("/page")
-    public Page<Movie> getPagingMovies(){
-        return movieService.getPageableMovies();
+    public Page<MovieResponse> getPagingMovies(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "3") int size){
+        return movieService.getPageableMovies(page,size);
     }
 
     @PostMapping
